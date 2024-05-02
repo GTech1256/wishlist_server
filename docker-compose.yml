@@ -39,6 +39,6 @@ services:
       - db
 
 # TODO: возможно нужно - https://github.com/khezen/compose-postgres/blob/master/docker-compose.yml
-# networks:
-#   postgres:
-#     driver: bridge
+networks:
+  postgres:
+    driver: bridge
