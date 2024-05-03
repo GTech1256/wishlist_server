@@ -31,4 +31,4 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_REPO_URL }}/wishlist-server:latest
             sudo docker stop wishlist-server-app || true
             sudo docker rm wishlist-server-app || true
-            sudo docker run -d -p 8080:3000 --network user1_default --name wishlist-server-app ${{ secrets.DOCKER_REPO_URL }}/wishlist-server:latest
+            sudo docker run -d -p 3000:3000 --network user1_default --name wishlist-server-app ${{ secrets.DOCKER_REPO_URL }}/wishlist-server:latest
