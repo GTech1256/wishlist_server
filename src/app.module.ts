@@ -13,7 +13,7 @@ import { List } from './list/entities/list.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'db',
+      host: 'postgres',
       port: 5432,
       username: 'postgres',
       password: 'postgres',
