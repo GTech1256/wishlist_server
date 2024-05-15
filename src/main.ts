@@ -7,7 +7,7 @@ const PORT = 3000;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.enableCors({ origin: '*' });
   app.useGlobalPipes(new ValidationPipe());
 
   console.log('Service trying start on PORT ' + PORT);
