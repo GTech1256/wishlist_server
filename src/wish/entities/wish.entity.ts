@@ -30,7 +30,7 @@ export class Wish {
   isPublic?: boolean;
 
   @ManyToOne(() => User, (user) => user.wishes)
-  @JoinTable()
+  @JoinTable({ name: 'userId' })
   user: User;
 
   @ManyToMany(() => List, (list) => list.wishes)

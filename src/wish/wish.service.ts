@@ -54,6 +54,11 @@ export class WishService {
   }
 
   findAllPublic() {
-    return this.wishRepository.find({ where: { isPublic: true } });
+    return this.wishRepository
+      .createQueryBuilder('wish')
+      .where({ isPublic: true })
+      .leftJoin('wish.user', 'user')
+      .select(['wish', 'user'])
+      .getMany();
   }
 }
