@@ -21,9 +21,13 @@ export class UserService {
       where: { user: { id: userId } },
     });
 
+    const wishPublic = await this.itemRepository.findAndCount({
+      where: { user: { id: userId }, isPublic: true },
+    });
+
     return {
       wishComplete: 0,
-      wishPublic: 0,
+      wishPublic: wishPublic[1],
       wishTotal: total[1],
     };
   }
