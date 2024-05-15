@@ -17,6 +17,12 @@ export class User {
   @Column()
   name: string;
 
+  @Column()
+  lastName: string;
+
+  @Column()
+  username: string;
+
   @OneToMany(() => Wish, (wish) => wish.user)
   @JoinTable()
   wishes: Wish[];

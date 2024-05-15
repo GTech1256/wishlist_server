@@ -25,9 +25,15 @@ export class WishController {
     return this.wishService.create(createWishDto, req.user.id);
   }
 
+  @Get('public')
+  @UseGuards(TelegramAuthenticatorGuard)
+  findAllPublic() {
+    return this.wishService.findAllPublic();
+  }
+
   @Get('user')
   @UseGuards(TelegramAuthenticatorGuard)
-  findAll(@Request() req: RequestGuard) {
+  findAllUser(@Request() req: RequestGuard) {
     return this.wishService.findAllByUserId(req.user.id);
   }
 

@@ -28,6 +28,21 @@ const verifyInitData = (telegramInitData: string): boolean => {
   return calculatedHash === hash;
 };
 
+type InitData = {
+  query_id: string;
+  user: {
+    id: number;
+    username: string;
+    first_name: string;
+    last_name: string;
+    is_premium: boolean;
+    allows_write_to_pm: boolean;
+    language_code: 'en' | string;
+  };
+  auth_date: number;
+  hash: string;
+};
+
 @Injectable()
 export class TelegramAuthenticatorGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> {
@@ -42,14 +57,16 @@ export class TelegramAuthenticatorGuard implements CanActivate {
       const isVerify = verifyInitData(telegramInitData);
 
       if (isVerify) {
-        const user = JSON.parse(
+        const user: InitData['user'] = JSON.parse(
           new URLSearchParams(telegramInitData).get('user'),
         );
-        const { id, first_name } = user;
+        const { id, first_name, username, last_name } = user;
 
         const requestUser: RequestUser = {
           id,
           name: first_name,
+          lastName: last_name,
+          username,
         };
 
         request.user = requestUser;

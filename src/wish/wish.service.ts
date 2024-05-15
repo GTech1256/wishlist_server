@@ -52,4 +52,8 @@ export class WishService {
 
     return this.wishRepository.remove(wish);
   }
+
+  findAllPublic() {
+    return this.wishRepository.find({ where: { isPublic: true } });
+  }
 }
