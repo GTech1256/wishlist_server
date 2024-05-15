@@ -1,24 +1,27 @@
-import { Item } from 'src/item/entities/item.entity';
+import { Wish } from 'src/wish/entities/wish.entity';
 import { List } from 'src/list/entities/list.entity';
 import {
   Entity,
   Column,
-  PrimaryGeneratedColumn,
   OneToOne,
   OneToMany,
+  PrimaryColumn,
+  JoinTable,
 } from 'typeorm';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number;
 
   @Column()
   name: string;
 
-  @OneToMany(() => Item, (item) => item.user)
-  items: Item[];
+  @OneToMany(() => Wish, (wish) => wish.user)
+  @JoinTable()
+  wishes: Wish[];
 
   @OneToOne(() => List, (list) => list.user)
+  @JoinTable()
   list: List;
 }

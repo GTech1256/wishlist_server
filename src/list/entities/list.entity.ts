@@ -1,4 +1,4 @@
-import { Item } from 'src/item/entities/item.entity';
+import { Wish } from 'src/wish/entities/wish.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Entity,
@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   OneToOne,
+  JoinTable,
 } from 'typeorm';
 
 @Entity()
@@ -17,8 +18,10 @@ export class List {
   name: string;
 
   @OneToOne(() => User, (user) => user.list)
+  @JoinTable()
   user: User;
 
-  @OneToMany(() => Item, (item) => item.list)
-  items: Item[];
+  @OneToMany(() => Wish, (wish) => wish.list)
+  @JoinTable()
+  wishes: Wish[];
 }

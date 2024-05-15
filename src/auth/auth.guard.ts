@@ -1,45 +1,59 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import * as crypto from 'crypto';
+import { RequestUser } from './types';
 
 const BOT_TOKEN = '6709137928:AAG4U2-yhB6nHh4y4EmfGNDfQelmuhB8GkA';
 
-const expirationTime = 300; // Adjust as needed, 300 seconds = 5 minutes
+// const expirationTime = 300; // Adjust as needed, 300 seconds = 5 minutes
+
+const verifyInitData = (telegramInitData: string): boolean => {
+  const urlParams = new URLSearchParams(telegramInitData);
+
+  const hash = urlParams.get('hash');
+  urlParams.delete('hash');
+  urlParams.sort();
+
+  let dataCheckString = '';
+  for (const [key, value] of urlParams.entries()) {
+    dataCheckString += `${key}=${value}\n`;
+  }
+  dataCheckString = dataCheckString.slice(0, -1);
+
+  const secret = crypto.createHmac('sha256', 'WebAppData').update(BOT_TOKEN);
+  const calculatedHash = crypto
+    .createHmac('sha256', secret.digest())
+    .update(dataCheckString)
+    .digest('hex');
+
+  return calculatedHash === hash;
+};
 
 @Injectable()
 export class TelegramAuthenticatorGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> {
     try {
       const request = context.switchToHttp().getRequest();
-      const dataReceived = request.headers?.['init-data'];
-      const { hash: receivedHash } = dataReceived;
+      const telegramInitData = request.headers?.['init-data'];
 
-      if (!dataReceived || !receivedHash) {
+      if (!telegramInitData) {
         return false;
       }
 
-      const sortedData = Object.keys(dataReceived)
-        .sort()
-        .map((key) => `${key}=${dataReceived[key]}`)
-        .join('\n');
+      const isVerify = verifyInitData(telegramInitData);
 
-      const secretKey = crypto
-        .createHmac('sha256', 'WebAppData')
-        .update(BOT_TOKEN)
-        .digest('hex');
-      const calculatedHash = crypto
-        .createHmac('sha256', secretKey)
-        .update(sortedData)
-        .digest('hex');
+      if (isVerify) {
+        const user = JSON.parse(
+          new URLSearchParams(telegramInitData).get('user'),
+        );
+        const { id, first_name } = user;
 
-      if (calculatedHash === receivedHash) {
-        const authDate = parseInt(dataReceived.auth_date);
-        const currentTimestamp = Math.floor(Date.now() / 1000);
+        const requestUser: RequestUser = {
+          id,
+          name: first_name,
+        };
 
-        if (currentTimestamp - authDate <= expirationTime) {
-          request['user'] = { id: 0 };
-
-          return true;
-        }
+        request.user = requestUser;
+        return true;
       }
 
       return false;
