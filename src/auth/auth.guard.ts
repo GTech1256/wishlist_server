@@ -8,39 +8,44 @@ const expirationTime = 300; // Adjust as needed, 300 seconds = 5 minutes
 @Injectable()
 export class TelegramAuthenticatorGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const dataReceived = request.body?.Telegram?.WebApp?.initData;
-    const receivedHash = request.body?.hash;
+    try {
+      const request = context.switchToHttp().getRequest();
+      const dataReceived = request.headers?.['init-data'];
+      const { hash: receivedHash } = dataReceived;
 
-    if (!dataReceived || !receivedHash) {
+      if (!dataReceived || !receivedHash) {
+        return false;
+      }
+
+      const sortedData = Object.keys(dataReceived)
+        .sort()
+        .map((key) => `${key}=${dataReceived[key]}`)
+        .join('\n');
+
+      const secretKey = crypto
+        .createHmac('sha256', 'WebAppData')
+        .update(BOT_TOKEN)
+        .digest('hex');
+      const calculatedHash = crypto
+        .createHmac('sha256', secretKey)
+        .update(sortedData)
+        .digest('hex');
+
+      if (calculatedHash === receivedHash) {
+        const authDate = parseInt(dataReceived.auth_date);
+        const currentTimestamp = Math.floor(Date.now() / 1000);
+
+        if (currentTimestamp - authDate <= expirationTime) {
+          request['user'] = { id: 0 };
+
+          return true;
+        }
+      }
+
+      return false;
+    } catch (e) {
+      console.error(e);
       return false;
     }
-
-    const sortedData = Object.keys(dataReceived)
-      .sort()
-      .map((key) => `${key}=${dataReceived[key]}`)
-      .join('\n');
-
-    const secretKey = crypto
-      .createHmac('sha256', 'WebAppData')
-      .update(BOT_TOKEN)
-      .digest('hex');
-    const calculatedHash = crypto
-      .createHmac('sha256', secretKey)
-      .update(sortedData)
-      .digest('hex');
-
-    if (calculatedHash === receivedHash) {
-      const authDate = parseInt(dataReceived.auth_date);
-      const currentTimestamp = Math.floor(Date.now() / 1000);
-
-      if (currentTimestamp - authDate <= expirationTime) {
-        request['user'] = { id: 0 };
-
-        return true;
-      }
-    }
-
-    return false;
   }
 }
