@@ -9,8 +9,8 @@ const expirationTime = 300; // Adjust as needed, 300 seconds = 5 minutes
 export class TelegramAuthenticatorGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const dataReceived = request.body.Telegram.WebApp.initData;
-    const receivedHash = request.body.hash;
+    const dataReceived = request.body?.Telegram?.WebApp?.initData;
+    const receivedHash = request.body?.hash;
 
     if (!dataReceived || !receivedHash) {
       return false;
