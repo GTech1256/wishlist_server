@@ -57,7 +57,7 @@ export class WishService {
     return this.wishRepository
       .createQueryBuilder('wish')
       .where({ isPublic: true })
-      .orderBy('wish.id')
+      .orderBy('wish.id', 'ASC')
       .leftJoin('wish.user', 'user')
       .select(['wish', 'user'])
       .getMany();
