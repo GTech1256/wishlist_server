@@ -9,6 +9,8 @@ services:
     container_name: postgres
     volumes:
       - ./pgdata:/var/lib/postgresql/data
+    networks:
+      - postgres
     # ports:
     #   - '5432:5432'
 
@@ -25,6 +27,9 @@ services:
       - db
     volumes:
       - ./src:/app/src
+    networks:
+      - app-network
+      - postgres
 
   pgadmin:
     image: dpage/pgadmin4
@@ -35,6 +40,8 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=pgadmin4
     ports:
       - '5050:80'
+    networks:
+      - postgres
     depends_on:
       - db
 
