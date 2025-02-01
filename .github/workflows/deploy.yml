@@ -27,6 +27,10 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.MY_EC2_SSH_KEY }}
           script: |
+            # Создаем сеть если не существует (для первого запуска)
+            sudo docker network create app-network || true
+            
+            # Обновляем контейнеры через docker-compose
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             sudo docker pull ${{ secrets.DOCKER_REPO_URL }}/wishlist-server:latest
             sudo docker stop wishlist-server-app || true

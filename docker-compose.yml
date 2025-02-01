@@ -62,6 +62,9 @@ services:
 networks:
   postgres:
     driver: bridge
+  app-network:
+    name: app-network
+    driver: bridge
 
 volumes:
     postgres:
