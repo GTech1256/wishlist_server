@@ -5,7 +5,7 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD=postgres
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: wishlist  # Создаст базу данных wishlist при запуске
     container_name: postgres
     volumes:
