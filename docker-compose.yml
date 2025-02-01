@@ -9,8 +9,6 @@ services:
     container_name: postgres
     volumes:
       - ./pgdata:/var/lib/postgresql/data
-    networks:
-      - postgres
     # ports:
     #   - '5432:5432'
 
@@ -27,9 +25,6 @@ services:
       - db
     volumes:
       - ./src:/app/src
-    networks:
-      - app-network
-      - postgres
 
   pgadmin:
     image: dpage/pgadmin4
@@ -68,9 +63,6 @@ services:
 # TODO: возможно нужно - https://github.com/khezen/compose-postgres/blob/master/docker-compose.yml
 networks:
   postgres:
-    driver: bridge
-  app-network:
-    name: app-network
     driver: bridge
 
 volumes:
