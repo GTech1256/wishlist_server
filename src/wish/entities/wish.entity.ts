@@ -1,4 +1,4 @@
-import { List } from 'src/list/entities/list.entity';
+import { Collection } from 'src/collection/entities/collection.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Entity,
@@ -33,7 +33,7 @@ export class Wish {
   @JoinTable({ name: 'userId' })
   user: User;
 
-  @ManyToMany(() => List, (list) => list.wishes)
+  @ManyToMany(() => Collection, (collection) => collection.wishes)
   @JoinTable()
-  list: List;
+  collection: Collection;
 }

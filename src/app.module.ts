@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { WishModule } from './wish/wish.module';
-import { ListModule } from './list/list.module';
+import { CollectionModule } from './collection/collection.module';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Wish } from './wish/entities/wish.entity';
 import { User } from './user/entities/user.entity';
-import { List } from './list/entities/list.entity';
+import { Collection } from './collection/entities/collection.entity';
 
 @Module({
   imports: [
@@ -18,11 +18,11 @@ import { List } from './list/entities/list.entity';
       username: 'postgres',
       password: 'postgres',
       database: 'wishlist',
-      entities: [User, Wish, List],
+      entities: [User, Wish, Collection],
       synchronize: true,
     }),
     WishModule,
-    ListModule,
+    CollectionModule,
     UserModule,
   ],
   controllers: [AppController],

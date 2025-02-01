@@ -1,5 +1,5 @@
 import { Wish } from 'src/wish/entities/wish.entity';
-import { List } from 'src/list/entities/list.entity';
+import { Collection } from 'src/collection/entities/collection.entity';
 import {
   Entity,
   Column,
@@ -27,7 +27,7 @@ export class User {
   @JoinTable()
   wishes: Wish[];
 
-  @OneToOne(() => List, (list) => list.user)
+  @OneToOne(() => Collection, (collection) => collection.user)
   @JoinTable()
-  list: List;
+  collection: Collection;
 }
