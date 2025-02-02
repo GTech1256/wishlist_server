@@ -20,6 +20,7 @@ import { Collection } from './collection/entities/collection.entity';
       database: 'wishlist',
       entities: [User, Wish, Collection],
       synchronize: true,
+      logging: true,
     }),
     WishModule,
     CollectionModule,
