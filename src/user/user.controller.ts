@@ -25,7 +25,7 @@ export class UserController {
   @ApiResponse({ status: 401, description: 'Неавторизованный доступ.' })
   userData(@Request() req: RequestGuard): UserDto {
     const createUserDto = new CreateUserDto();
-    createUserDto.id = req.user.id;
+    createUserDto.id = 999; // req.user.id;
     createUserDto.name = req.user.name;
     createUserDto.lastName = req.user.lastName;
     createUserDto.username = req.user.username;
