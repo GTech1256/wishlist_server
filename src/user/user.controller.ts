@@ -5,6 +5,7 @@ import { RequestGuard } from 'src/shared/types';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UserStatsDto } from './dto/user-stats.dto';
 import { UserDto } from './dto/user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -23,7 +24,14 @@ export class UserController {
   })
   @ApiResponse({ status: 401, description: 'Неавторизованный доступ.' })
   userData(@Request() req: RequestGuard): UserDto {
-    this.userService.createIfNotExist(req.user);
+    const createUserDto = new CreateUserDto();
+    createUserDto.id = req.user.id;
+    createUserDto.name = req.user.name;
+    createUserDto.lastName = req.user.lastName;
+    createUserDto.username = req.user.username;
+    createUserDto.avatar = req.user.avatar;
+
+    this.userService.createIfNotExist(createUserDto);
 
     return req.user;
   }
