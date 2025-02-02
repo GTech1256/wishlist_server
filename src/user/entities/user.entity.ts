@@ -31,7 +31,7 @@ export class User {
   username: string;
 
   @ApiProperty({ description: 'URL изображения пользователя' })
-  @Column()
+  @Column({ nullable: true })
   avatar: string;
 
   @OneToMany(() => Wish, (wish) => wish.user)
