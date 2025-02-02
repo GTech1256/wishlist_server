@@ -19,6 +19,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    develop:
+      watch:
+        - action: sync
+          path: ./web
+          target: /src/web
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
     container_name: nest-docker-postgres
     environment:
       - PORT=${PORT}

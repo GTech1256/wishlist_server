@@ -12,21 +12,24 @@ export class CollectionService {
     private readonly collectionRepository: Repository<Collection>,
   ) {}
 
-  async create(createCollectionDto: CreateCollectionDto) {
+  async create(createCollectionDto: CreateCollectionDto): Promise<Collection> {
     const collection = this.collectionRepository.create(createCollectionDto);
 
     return this.collectionRepository.save(collection);
   }
 
-  findOne(id: number) {
+  async findOne(id: number): Promise<Collection | null> {
     return this.collectionRepository.findOneBy({ id });
   }
 
-  findAllByUserId(userID: number) {
+  async findAllByUserId(userID: number): Promise<Collection[]> {
     return this.collectionRepository.find({ where: { user: { id: userID } } });
   }
 
-  async update(id: number, updateCollectionDto: UpdateCollectionDto) {
+  async update(
+    id: number,
+    updateCollectionDto: UpdateCollectionDto,
+  ): Promise<Collection> {
     const collection = await this.findOne(id);
     if (!collection) {
       throw new NotFoundException();
@@ -37,7 +40,7 @@ export class CollectionService {
     return this.collectionRepository.save(collection);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<Collection> {
     const collection = await this.findOne(id);
     if (!collection) {
       throw new NotFoundException();

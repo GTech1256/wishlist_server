@@ -3,4 +3,5 @@ export type RequestUser = {
   name: string;
   lastName: string;
   username: string;
+  avatar?: string;
 };

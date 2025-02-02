@@ -38,6 +38,7 @@ type InitData = {
     is_premium: boolean;
     allows_write_to_pm: boolean;
     language_code: 'en' | string;
+    photo_url?: string;
   };
   auth_date: number;
   hash: string;
@@ -60,13 +61,14 @@ export class TelegramAuthenticatorGuard implements CanActivate {
         const user: InitData['user'] = JSON.parse(
           new URLSearchParams(telegramInitData).get('user'),
         );
-        const { id, first_name, username, last_name } = user;
+        const { id, first_name, username, last_name, photo_url } = user;
 
         const requestUser: RequestUser = {
           id,
           name: first_name,
           lastName: last_name,
           username,
+          avatar: photo_url,
         };
 
         request.user = requestUser;

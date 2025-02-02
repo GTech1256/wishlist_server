@@ -18,3 +18,11 @@ CREATE DATABASE wishlist;
 
 
 sudo docker exec -it gtech156/wishlist-ui:latest cat /var/log/nginx/error.log
+
+
+
+npm i                                   
+## npm error code ERESOLVE
+npm error ERESOLVE unable to resolve dependency tree
+
+npm i --legacy-peer-deps

@@ -12,7 +12,7 @@ export class WishService {
     private readonly wishRepository: Repository<Wish>,
   ) {}
 
-  async create(createWishDto: CreateWishDto, userId: number) {
+  async create(createWishDto: CreateWishDto, userId: number): Promise<Wish> {
     const wish = this.wishRepository.create({
       user: { id: userId },
       ...createWishDto,
@@ -21,19 +21,26 @@ export class WishService {
     return this.wishRepository.save(wish);
   }
 
-  findOnePublic(id: number) {
+  findOnePublic(id: number): Promise<Wish | null> {
     return this.wishRepository.findOneBy({ id, isPublic: true });
   }
 
-  private findOneWishGuardUser(id: number, userId: number) {
+  private findOneWishGuardUser(
+    id: number,
+    userId: number,
+  ): Promise<Wish | null> {
     return this.wishRepository.findOneBy({ id, user: { id: userId } });
   }
 
-  findAllByUserId(userID: number) {
+  findAllByUserId(userID: number): Promise<Wish[]> {
     return this.wishRepository.find({ where: { user: { id: userID } } });
   }
 
-  async update(id: number, updateWishDto: UpdateWishDto, userId: number) {
+  async update(
+    id: number,
+    updateWishDto: UpdateWishDto,
+    userId: number,
+  ): Promise<Wish> {
     const wish = await this.findOneWishGuardUser(id, userId);
     if (!wish) {
       throw new NotFoundException();
@@ -44,7 +51,7 @@ export class WishService {
     return this.wishRepository.save(wish);
   }
 
-  async remove(id: number, userId: number) {
+  async remove(id: number, userId: number): Promise<Wish> {
     const wish = await this.findOneWishGuardUser(id, userId);
     if (!wish) {
       throw new NotFoundException();
@@ -53,7 +60,7 @@ export class WishService {
     return this.wishRepository.remove(wish);
   }
 
-  findAllPublic() {
+  findAllPublic(): Promise<Wish[]> {
     return this.wishRepository
       .createQueryBuilder('wish')
       .where({ isPublic: true })
