@@ -7,7 +7,6 @@ import {
   OneToMany,
   PrimaryColumn,
   JoinTable,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -15,7 +14,6 @@ import { ApiProperty } from '@nestjs/swagger';
 export class User {
   @PrimaryColumn()
   @ApiProperty({ description: 'Уникальный идентификатор пользователя' })
-  @PrimaryGeneratedColumn()
   id: number;
 
   @ApiProperty({ description: 'Имя пользователя' })
