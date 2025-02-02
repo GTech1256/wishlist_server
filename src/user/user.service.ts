@@ -40,6 +40,7 @@ export class UserService {
     const user = await this.findOne(createUserDto.id);
 
     if (!user) {
+      console.log('create user', createUserDto);
       this.create(createUserDto);
     }
   }
