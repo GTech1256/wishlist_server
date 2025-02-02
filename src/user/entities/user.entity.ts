@@ -30,9 +30,9 @@ export class User {
   @Column()
   username: string;
 
-  @ApiProperty({ description: 'Электронная почта пользователя' })
-  @Column({ unique: true })
-  email: string;
+  @ApiProperty({ description: 'URL изображения пользователя' })
+  @Column()
+  avatar: string;
 
   @OneToMany(() => Wish, (wish) => wish.user)
   @JoinTable()
