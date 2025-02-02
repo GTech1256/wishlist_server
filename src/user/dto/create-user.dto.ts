@@ -1,19 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsNumber,
-  IsNotEmpty,
-  IsOptional,
-  IsPositive,
-  IsString,
-} from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { PrimaryColumn } from 'typeorm';
 
 export class CreateUserDto {
-  @ApiProperty({ description: 'Идентификатор пользователя' })
-  @IsNumber()
-  @IsNotEmpty()
-  @IsPositive()
-  @PrimaryColumn({ nullable: false, unique: true, type: 'int', primary: true })
+  @PrimaryColumn()
   id: number;
 
   @ApiProperty({ description: 'Имя пользователя' })
